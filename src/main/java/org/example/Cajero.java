@@ -5,7 +5,12 @@ import java.util.Scanner;
 public class Cajero {
 
     private static int saldo = 100000;
+    private static int saldo_reiniciado = 100000;
     private static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        menu();
+    }
 
     /**
      * Ejecuta el menú principal del programa y gestiona la interacción con el usuario.
@@ -46,12 +51,22 @@ public class Cajero {
     private static void ejecutarOpcion(int opcion) {
         try {
             switch (opcion){
-                case 1:
+                case 1 -> {
                     System.out.println("Monto a retirar: ");
-                    int monto = scanner.nextInt();
+                    int monto = Integer.parseInt(scanner.nextLine());
                     retirar(monto);
-                case 2 -> obtenerSaldo();
-                case 3 -> depositar();
+                }
+
+                case 2 -> {
+                    System.out.println("Su saldo es de: " + obtenerSaldo());
+                }
+
+                case 3 -> {
+                    System.out.println("Monto a depositar: ");
+                    int monto = Integer.parseInt(scanner.nextLine());
+                    depositar(monto);
+                }
+                case 0 -> System.out.println("Saliendo del programa....");
                 default -> System.out.println("Opción inválida");
             }
         } catch (NumberFormatException e) {
@@ -82,7 +97,7 @@ public class Cajero {
         }
 
         saldo -= monto;
-        System.out.println("Retiro exitoso. Nuevo saldo: $"+ saldo);
+
         // TODO: Validar monto positivo
         // TODO: Validar múltiplo de 1000
 
@@ -95,6 +110,18 @@ public class Cajero {
      * @param monto Monto a depositar.
      */
     public static void depositar(int monto) {
+        if (monto <= 0) {
+            System.out.println("El monto debe ser mayor que cero.");
+            return;
+        }
+
+        if (monto % 1000 != 0){
+            System.out.println("El monto debe ser múltiplo de 1000.");
+            return;
+        }
+
+        saldo += monto ;
+        System.out.println("Depósito realizado. Nuevo saldo: $" + saldo);
         // TODO: Validar monto positivo
         // TODO: Validar múltiplo de 1000
         // TODO: Sumar el monto al saldo si es válido
@@ -106,13 +133,15 @@ public class Cajero {
      */
     public static int obtenerSaldo() {
         // TODO: Retornar el valor actual del saldo
-        return 0;
+        return saldo;
     }
 
     /**
      * Reinicia el saldo a un valor inicial fijo (usado en pruebas).
      */
     public static void reiniciarSaldo() {
+        saldo = saldo_reiniciado;
+        System.out.println("El saldo ha sido reiniciado a $" + saldo);
         // TODO: Restablecer el valor del saldo a su valor original
     }
 }
